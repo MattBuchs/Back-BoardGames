@@ -1,0 +1,4 @@
+### Find all Users
+GET http://localhost:1234/
+# Content-Type: application/json
+# Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjE2LCJ1c2VybmFtZSI6InVzZXIyIiwiaWF0IjoxNzA5NzE3NDc2LCJleHAiOjE3MDk3MjEwNzZ9.fB6whxshFvLiOO4KZOwmo6hJQE1vZN4OsKfKo6d1EJs
