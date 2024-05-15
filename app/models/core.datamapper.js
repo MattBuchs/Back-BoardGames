@@ -8,11 +8,11 @@ export default class CoreDatamapper {
     }
 
     async findAll() {
-        const result = await this.client.query(
-            `SELECT * FROM "${this.tableName}"`
-        );
+        const result = await this.client
+            .promise()
+            .query(`SELECT * FROM ${this.tableName}`);
 
-        return result.rows;
+        return result[0];
     }
 
     async findByPk(id) {

@@ -1,17 +1,20 @@
-import pg from "pg";
+import mysql from "mysql2";
 import logger from "./logger.js";
 
-const { Client } = pg;
+const { createConnection } = mysql;
 
-const client = new Client({
-    connectionString: process.env.DATABASE_URL,
+const client = createConnection({
+    host: "localhost",
+    user: "root",
+    password: "/9oVerLord9/",
+    database: "boardgames",
 });
 
 client.connect((error) => {
     if (error) {
         logger.log("Error connecting to database", error);
     } else {
-        logger.log("pg successfully connected to the database");
+        logger.log("mysql successfully connected to the database");
     }
 });
 
