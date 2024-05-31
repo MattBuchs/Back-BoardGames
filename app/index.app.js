@@ -4,13 +4,13 @@ import router from "./routers/index.router.js";
 
 const app = express();
 
-const corsOptions = {
-    origin: process.env.FRONTEND_URL,
-    methods: ["GET", "POST", "PATCH", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-};
+// const corsOptions = {
+//     origin: process.env.FRONTEND_URL,
+//     methods: ["GET", "POST", "PATCH", "DELETE"],
+//     allowedHeaders: ["Content-Type", "Authorization"],
+// };
 
-app.use(cors(corsOptions));
+app.use(cors());
 
 app.use(express.json());
 
