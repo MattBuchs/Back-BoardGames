@@ -1,7 +1,11 @@
 import client from "../helpers/db.js";
 
 // All of the datamappers
-import ExampleDatamapper from "./example.datamapper.js";
+import UserDatamapper from "./user.datamapper.js";
+import GameDatamapper from "./game.datamapper.js";
+import GameUserDatamapper from "./gameUser.datamapper.js";
 
 // Instanciation while passing client to the constructor
-export const exampleDatamapper = new ExampleDatamapper(client);
+export const userDatamapper = new UserDatamapper(client);
+export const gameDatamapper = new GameDatamapper(client);
+export const gameUserDatamapper = new GameUserDatamapper(client);

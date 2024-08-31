@@ -8,82 +8,87 @@ export default class CoreDatamapper {
     }
 
     async findAll() {
-        const result = await this.client
-            .promise()
-            .query(`SELECT * FROM ${this.tableName}`);
+        const [rows] = await this.client.query(
+            `SELECT * FROM \`${this.tableName}\``
+        );
 
-        return result[0];
+        return rows || null;
     }
 
     async findByPk(id) {
-        const result = await this.client.query(
-            `SELECT * FROM "${this.tableName}" WHERE id = $1`,
+        const [rows] = await this.client.query(
+            `SELECT * FROM \`${this.tableName}\` WHERE id = ?`,
             [id]
         );
-        return result.rows[0];
+        return rows[0] || null;
     }
 
     async findOne(key, value) {
-        const result = await this.client.query(
-            `SELECT * FROM "${this.tableName}" WHERE ${key} = $1`,
+        const [rows] = await this.client.query(
+            `SELECT * FROM \`${this.tableName}\` WHERE \`${key}\` = ?`,
             [value]
         );
 
-        return result.rows[0] || null;
+        return rows[0] || null;
     }
 
     async findByKeyValue(key, value) {
-        const result = await this.client.query(
-            `SELECT * FROM "${this.tableName}" WHERE ${key} = $1`,
+        const [rows] = await this.client.query(
+            `SELECT * FROM \`${this.tableName}\` WHERE \`${key}\` = ?`,
             [value]
         );
 
-        return result.rows || null;
+        return rows || null;
     }
 
     async create(inputData) {
         const fields = Object.keys(inputData);
         const values = Object.values(inputData);
 
-        const placeholders = values.map((_, index) => `$${index + 1}`);
+        // Créez des placeholders pour les valeurs
+        const placeholders = values.map(() => "?").join(", ");
+        // Créez une chaîne pour les noms de colonnes entourés de backticks
+        const fieldsString = fields.map((field) => `\`${field}\``).join(", ");
 
-        const result = await this.client.query(
+        const [result] = await this.client.query(
             `
-                INSERT INTO "${this.tableName}" (${fields})
-                VALUES (${placeholders})
-            `,
+            INSERT INTO \`${this.tableName}\` (${fieldsString})
+            VALUES (${placeholders})
+        `,
             values
         );
 
-        return !!result.rowCount;
+        return result.affectedRows > 0;
     }
 
     async update(inputData, id) {
         const fields = Object.keys(inputData);
         const values = Object.values(inputData);
-        values.push(id);
+        values.push(id); // Ajoutez l'ID à la fin des valeurs
 
-        const updateColumns = Object.keys(inputData)
-            .map((column) => `${column} = $${fields.indexOf(column) + 1}`)
+        // Créez la chaîne pour les colonnes à mettre à jour avec des placeholders
+        const updateColumns = fields
+            .map((column) => `\`${column}\` = ?`)
             .join(", ");
 
-        const result = await this.client.query(
+        const [result] = await this.client.query(
             `
-          UPDATE "${this.tableName}" 
-          SET ${updateColumns}
-          WHERE id = $${fields.length + 1}
-        `,
+                UPDATE \`${this.tableName}\`
+                SET ${updateColumns}
+                WHERE \`id\` = ?
+            `,
             values
         );
 
-        return !!result.rowCount;
+        // Vérifiez si la mise à jour a réussi
+        return result.affectedRows > 0;
     }
 
     async delete(id) {
-        const result = await this.client.query(
-            `DELETE FROM "${this.tableName}" WHERE id = $1`,
+        const [result] = await this.client.query(
+            `DELETE FROM \`${this.tableName}\` WHERE id = ?`,
             [id]
         );
-        return !!result.rowCount;
+        return result.affectedRows > 0;
     }
 }

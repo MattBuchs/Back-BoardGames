@@ -3,12 +3,12 @@ import * as datamappers from "../models/index.datamapper.js";
 export default {
     async getExample(req, res) {
         try {
-            const example = await datamappers.exampleDatamapper.findAll();
+            const users = await datamappers.userDatamapper.findAll();
 
-            if (!example)
-                throw new Error("Example not found", { cause: { code: 404 } });
+            if (!users)
+                throw new Error("Users not found", { cause: { code: 404 } });
 
-            return res.json({ example });
+            return res.json({ example: users });
         } catch (err) {
             if (err.cause) {
                 const { code } = err.cause;

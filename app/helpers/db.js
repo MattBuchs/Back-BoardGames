@@ -1,21 +1,20 @@
-import mysql from "mysql2";
+import mysql from "mysql2/promise";
 import logger from "./logger.js";
 
 const { createConnection } = mysql;
 
-const client = createConnection({
+const client = await createConnection({
     host: "localhost",
     user: "root",
     password: "/9oVerLord9/",
     database: "boardgames",
 });
 
-client.connect((error) => {
-    if (error) {
-        logger.log("Error connecting to database", error);
-    } else {
-        logger.log("mysql successfully connected to the database");
-    }
-});
+try {
+    await client.connect();
+    logger.log("MySQL successfully connected to the database");
+} catch (error) {
+    logger.log("Error connecting to database", error);
+}
 
 export default client;
