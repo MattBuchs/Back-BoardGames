@@ -1,8 +1,7 @@
 import { nanoid } from "nanoid";
-import { initializeSquares } from "./initializeSquares.js";
+import { initializeSquares } from "../services/initializeSquares.js";
 
-export const checkersSocket = (io) => {
-    const checkersNamespace = io.of("/checkers");
+export const checkersSocket = (checkersNamespace) => {
     const games = {};
 
     checkersNamespace.on("connection", (socket) => {

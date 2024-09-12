@@ -15,3 +15,20 @@ export default function authenticateToken(req, res, next) {
         next();
     });
 }
+
+export function authenticateSocket(socket, next) {
+    const token = socket.handshake.auth.token;
+
+    if (!token) {
+        return next(new Error("Token undefined"));
+    }
+
+    jwt.verify(token, process.env.SECRET_KEY, (err, user) => {
+        if (err) {
+            return next(new Error("Token verification failed"));
+        }
+
+        socket.user = user;
+        next();
+    });
+}

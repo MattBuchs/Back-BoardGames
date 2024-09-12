@@ -3,20 +3,18 @@ import { createServer } from "node:http";
 import logger from "./app/helpers/logger.js";
 import app from "./app/index.app.js";
 import { Server } from "socket.io";
-import { checkersSocket } from "./app/services/checkers.socket.js";
+import { initializeSocket } from "./app/services/initializeSocket.js";
 
 const server = createServer(app);
 
 const io = new Server(server, {
     cors: {
-        origin: "http://localhost:5173", // L'origine de votre client
+        origin: "http://localhost:5173",
         methods: ["GET", "POST"],
-        allowedHeaders: ["my-custom-header"],
-        credentials: true,
     },
 });
 
-checkersSocket(io);
+initializeSocket(io);
 
 const PORT = process.env.PORT ?? 3000;
 

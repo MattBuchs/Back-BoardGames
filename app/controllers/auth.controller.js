@@ -2,6 +2,7 @@ import * as EmailValidator from "email-validator";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import * as datamappers from "../models/index.datamapper.js";
+import isValidPassword from "../validation/passwordSchema.middleware.js";
 
 export default {
     async signup(req, res) {
@@ -15,6 +16,12 @@ export default {
             // email verification
             if (!EmailValidator.validate(email)) {
                 throw new Error("Invalid email", { cause: { code: 400 } });
+            }
+
+            if (!isValidPassword(password)) {
+                throw new Error("The password must match what is indicated", {
+                    cause: { code: 400 },
+                });
             }
 
             // check if passwords match
@@ -72,6 +79,10 @@ export default {
         const { email, password } = req.body;
 
         try {
+            if (!email || !password) {
+                throw new Error("Missing values", { cause: { code: 400 } });
+            }
+
             // email verification
             if (!EmailValidator.validate(email)) {
                 throw new Error("Invalid email", { cause: { code: 400 } });
@@ -104,7 +115,7 @@ export default {
 
             // creation of the token
             const token = jwt.sign(user, process.env.SECRET_KEY, {
-                expiresIn: "1000000",
+                expiresIn: "10000000",
             });
 
             return res.json({ token });
