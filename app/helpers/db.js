@@ -4,10 +4,10 @@ import logger from "./logger.js";
 const { createConnection } = mysql;
 
 const client = await createConnection({
-    host: "localhost",
-    user: "root",
-    password: "/9oVerLord9/",
-    database: "boardgames",
+    host: process.env.HOST,
+    user: process.env.USER,
+    password: process.env.PASSWORD,
+    database: process.env.DATABASE,
 });
 
 try {
